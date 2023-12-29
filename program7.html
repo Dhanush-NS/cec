@@ -1,0 +1,74 @@
+<!-- Program 7
+Write an AngularJS program to create a simple CRUD application (Create, 
+Read, Update, and Delete) for managing users. -->
+
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<title>AngularJS CRUD Operations</title>
+<script 
+src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+</head>
+<body>
+<div ng-controller="myCtrl">
+<h2>Employee List</h2>
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Action</th>
+</tr>
+<tr ng-repeat="employee in employees">
+<td>{{ employee.id }}</td>
+<td>{{ employee.name }}</td>
+<td>{{ employee.age }}</td>
+<td>
+<button ng-click="editEmployee(employee)">Edit</button>
+<button ng-click="deleteEmployee(employee.id)">Delete</button>
+</td>
+</tr>
+</table>
+<h2>Add/Edit Employee</h2>
+<form>
+<label>Name:</label>
+<input type="text" ng-model="employee.name" required><br>
+<label>Age:</label>
+<input type="number" ng-model="employee.age" required><br>
+<button ng-click="saveEmployee()">Save</button>
+</form>
+</div>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function ($scope) {
+$scope.employees = [
+{ id: 1, name: 'John Doe', age: 30 },
+{ id: 2, name: 'Jane Doe', age: 25 }
+];
+$scope.employee = {};
+$scope.editEmployee = function (emp) {
+$scope.employee = angular.copy(emp);
+};
+$scope.saveEmployee = function () {
+if ($scope.employee.id) {
+// Update existing employee
+var index = $scope.employees.findIndex(e => e.id === 
+$scope.employee.id);
+$scope.employees[index] = angular.copy($scope.employee);
+} else {
+// Add new employee
+$scope.employee.id = $scope.employees.length + 1;
+$scope.employees.push(angular.copy($scope.employee));
+}
+// Clear the form
+$scope.employee = {};
+};
+$scope.deleteEmployee = function (id) {
+var index = $scope.employees.findIndex(e => e.id === id);
+$scope.employees.splice(index, 1);
+};
+});
+</script>
+</body>
+</html>
